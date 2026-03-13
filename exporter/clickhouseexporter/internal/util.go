@@ -5,7 +5,6 @@ package internal // import "github.com/open-telemetry/opentelemetry-collector-co
 
 import (
 	"slices"
-	"strings"
 
 	"github.com/ClickHouse/clickhouse-go/v2/lib/column"
 	"github.com/ClickHouse/clickhouse-go/v2/lib/column/orderedmap"
@@ -49,11 +48,7 @@ func UniqueFlattenedAttributes(m pcommon.Map) []string {
 func uniqueFlattenedAttributesNested(pathPrefix string, pathsSet *map[string]struct{}, paths *[]string, m pcommon.Map) {
 	m.Range(func(path string, v pcommon.Value) bool {
 		if pathPrefix != "" {
-			var b strings.Builder
-			b.WriteString(pathPrefix)
-			b.WriteRune('.')
-			b.WriteString(path)
-			path = b.String()
+			path = pathPrefix + "." + path
 		}
 
 		if v.Type() == pcommon.ValueTypeMap {
